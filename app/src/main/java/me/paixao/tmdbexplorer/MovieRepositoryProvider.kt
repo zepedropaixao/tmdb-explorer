@@ -1,8 +1,8 @@
 
 object MovieRepositoryProvider {
 
-    fun provideSearchRepository(): SearchRepository {
-        return SearchRepository(TMDbAPI.Factory.create())
+    fun provideSearchRepository(): MovieRepository {
+        return MovieRepository(TMDbAPI.Factory.create())
     }
 
 }
