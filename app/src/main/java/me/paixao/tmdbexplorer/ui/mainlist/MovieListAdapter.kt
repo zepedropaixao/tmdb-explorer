@@ -1,4 +1,4 @@
-package me.paixao.tmdbexplorer.adapters
+package me.paixao.tmdbexplorer.ui.mainlist
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -13,7 +13,7 @@ import me.paixao.tmdbexplorer.utils.GlideApp
 import me.paixao.tmdbexplorer.utils.inflate
 
 
-class RecyclerAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapter<RecyclerAdapter.MovieHolder>() {
+class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
 
     private val clickSubject = PublishSubject.create<Movie>()
 

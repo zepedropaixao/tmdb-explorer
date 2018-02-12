@@ -1,4 +1,4 @@
-package me.paixao.tmdbexplorer.ui.MainList
+package me.paixao.tmdbexplorer.ui.mainlist
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -14,7 +14,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
-import me.paixao.tmdbexplorer.adapters.RecyclerAdapter
 import me.paixao.tmdbexplorer.comm.repositories.MovieRepository
 import me.paixao.tmdbexplorer.comm.repositories.MovieRepositoryProvider
 
@@ -22,7 +21,7 @@ open class MovieListActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
-    private lateinit var adapter: RecyclerAdapter
+    private lateinit var adapter: MovieListAdapter
     private lateinit var layoutManager: GridLayoutManager
     private val lastVisibleItemPosition: Int
         get() = layoutManager.findLastVisibleItemPosition()
@@ -53,7 +52,7 @@ open class MovieListActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(this, 6)
         }
         grid.layoutManager = layoutManager
-        adapter = RecyclerAdapter(mutableListOf())
+        adapter = MovieListAdapter(mutableListOf())
 
         disposables.add(adapter.getViewClickedObservable()
                 .subscribe({

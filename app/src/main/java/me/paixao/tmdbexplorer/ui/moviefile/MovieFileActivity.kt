@@ -1,4 +1,4 @@
-package me.paixao.tmdbexplorer.ui.MovieFile
+package me.paixao.tmdbexplorer.ui.moviefile
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

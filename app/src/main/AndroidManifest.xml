@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainList.MovieListActivity"
+            android:name=".ui.mainlist.MovieListActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MovieFile.MovieFileActivity"
+        <activity android:name=".ui.moviefile.MovieFileActivity"
             android:configChanges="orientation|screenSize">
 
         </activity>
