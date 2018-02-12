@@ -1,8 +1,5 @@
-package me.paixao.tmdbexplorer
+package me.paixao.tmdbexplorer.ui.MainList
 
-import MovieRepository
-import MovieRepositoryProvider
-import RecyclerAdapter
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -16,8 +13,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
+import me.paixao.tmdbexplorer.R
+import me.paixao.tmdbexplorer.adapters.RecyclerAdapter
+import me.paixao.tmdbexplorer.comm.repositories.MovieRepository
+import me.paixao.tmdbexplorer.comm.repositories.MovieRepositoryProvider
 
-class MovieListActivity : AppCompatActivity() {
+open class MovieListActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
@@ -31,6 +32,7 @@ class MovieListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
+        setTitle("moviExplorer")
         setSupportActionBar(toolbar)
 
         repository = MovieRepositoryProvider.provideSearchRepository()
@@ -42,12 +44,9 @@ class MovieListActivity : AppCompatActivity() {
                 .subscribe({ aVoid ->
                     //Perform some work here//
                 })*/
-
-
     }
 
     fun setupRecyclerView() {
-
         if (getResources().getConfiguration().orientation === Configuration.ORIENTATION_PORTRAIT) {
             layoutManager = GridLayoutManager(this, 3)
         } else {
@@ -58,12 +57,12 @@ class MovieListActivity : AppCompatActivity() {
 
         disposables.add(adapter.getViewClickedObservable()
                 .subscribe({
+
+
                     Toast.makeText(this, "Clicked on ${it.title}", Toast.LENGTH_LONG).show()
                 }))
 
         grid.adapter = adapter
-
-
 
         disposables.add(repository.discoverMovies()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,9 +82,7 @@ class MovieListActivity : AppCompatActivity() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 val totalItemCount = recyclerView!!.layoutManager.itemCount
-                Log.e("ERROR", "IM HER "+totalItemCount+" - "+lastVisibleItemPosition)
-                if (!repository.isLoadingData && totalItemCount == lastVisibleItemPosition + 1) {
-                    Log.e("ERROR", "IM HER")
+                if (!repository.isLoadingData && totalItemCount <= lastVisibleItemPosition + 6) {
                     disposables.add(repository.discoverMoreMovies()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())

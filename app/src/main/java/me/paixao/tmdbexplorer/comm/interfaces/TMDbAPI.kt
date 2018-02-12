@@ -1,4 +1,7 @@
+package me.paixao.tmdbexplorer.comm.interfaces
+
 import io.reactivex.Flowable
+import me.paixao.tmdbexplorer.models.Result
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory

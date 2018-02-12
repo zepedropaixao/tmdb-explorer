@@ -1,3 +1,8 @@
+package me.paixao.tmdbexplorer.comm.repositories
+
+import me.paixao.tmdbexplorer.comm.interfaces.TMDbAPI
+import me.paixao.tmdbexplorer.models.Result
+
 /**
  * Repository method to access search functionality of the api service
  */

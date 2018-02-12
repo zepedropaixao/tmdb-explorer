@@ -1,3 +1,4 @@
+package me.paixao.tmdbexplorer.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -7,19 +8,21 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.recyclerview_movie_list_item.view.*
 import me.paixao.tmdbexplorer.R
-
+import me.paixao.tmdbexplorer.models.Movie
+import me.paixao.tmdbexplorer.utils.GlideApp
+import me.paixao.tmdbexplorer.utils.inflate
 
 
 class RecyclerAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapter<RecyclerAdapter.MovieHolder>() {
 
     private val clickSubject = PublishSubject.create<Movie>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.MovieHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val inflatedView = parent.inflate(R.layout.recyclerview_movie_list_item, false)
         return MovieHolder(inflatedView)
     }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.MovieHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         val item = movies[position]
         holder.bindMovie(item)
     }
@@ -54,7 +57,10 @@ class RecyclerAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ada
 
         fun bindMovie(movie: Movie) {
             this.movie = movie
-            Glide.with(view.context).load("https://image.tmdb.org/t/p/w500"+movie.poster_path).into(view.itemImage)
+            GlideApp.with(view.context)
+                    .load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
+                    .thumbnail(Glide.with(view.context).load(R.drawable.loader))
+                    .into(view.itemImage)
             view.itemDate.text = movie.release_date
             view.itemDescription.text = movie.title
         }

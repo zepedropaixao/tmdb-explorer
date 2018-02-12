@@ -1,3 +1,5 @@
+package me.paixao.tmdbexplorer.models
+
 data class Movie(
         val id: Long,
         val poster_path: String,
