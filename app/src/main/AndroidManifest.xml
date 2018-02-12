@@ -28,7 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MovieFile.MovieFileActivity"></activity>
+        <activity android:name=".ui.MovieFile.MovieFileActivity"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
     </application>
 
 </manifest>
