@@ -4,7 +4,7 @@ import me.paixao.tmdbexplorer.comm.interfaces.TMDbAPI
 
 object MovieRepositoryProvider {
 
-    fun provideSearchRepository(): MovieRepository {
+    fun provideRepository(): MovieRepository {
         return MovieRepository(TMDbAPI.create())
     }
 

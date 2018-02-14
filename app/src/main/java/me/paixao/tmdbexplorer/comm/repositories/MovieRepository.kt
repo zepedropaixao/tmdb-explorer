@@ -1,6 +1,7 @@
 package me.paixao.tmdbexplorer.comm.repositories
 
 import me.paixao.tmdbexplorer.comm.interfaces.TMDbAPI
+import me.paixao.tmdbexplorer.models.Movie
 import me.paixao.tmdbexplorer.models.Result
 
 /**
@@ -16,6 +17,7 @@ class MovieRepository(val apiService: TMDbAPI) {
 
     fun discoverMovies(): io.reactivex.Flowable<Result> {
         isLoadingData = true
+        page = 1
         return apiService.discover(apiKey, "popularity.desc",page)
     }
 
@@ -23,6 +25,11 @@ class MovieRepository(val apiService: TMDbAPI) {
         isLoadingData = true
         page++
         return apiService.discover(apiKey, "popularity.desc",page)
+    }
+
+    fun getMovie(movieId: Long): io.reactivex.Flowable<Movie> {
+        isLoadingData = true
+        return apiService.get(movieId, apiKey)
     }
 
 

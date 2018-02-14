@@ -1,40 +1,31 @@
 package me.paixao.tmdbexplorer.ui.mainlist
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
-import me.paixao.tmdbexplorer.comm.repositories.MovieRepository
-import me.paixao.tmdbexplorer.comm.repositories.MovieRepositoryProvider
+import me.paixao.tmdbexplorer.ui.moviefile.MovieFileActivity
 
-open class MovieListActivity : AppCompatActivity() {
-
-    private val disposables = CompositeDisposable()
+open class MovieListActivity : BaseActivity() {
 
     private lateinit var adapter: MovieListAdapter
     private lateinit var layoutManager: GridLayoutManager
     private val lastVisibleItemPosition: Int
         get() = layoutManager.findLastVisibleItemPosition()
 
-    private lateinit var repository: MovieRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
         setTitle("moviExplorer")
         setSupportActionBar(toolbar)
-
-        repository = MovieRepositoryProvider.provideSearchRepository()
 
         setupRecyclerView()
         setRecyclerViewScrollListener()
@@ -56,9 +47,11 @@ open class MovieListActivity : AppCompatActivity() {
 
         disposables.add(adapter.getViewClickedObservable()
                 .subscribe({
+                    val intent = Intent(this, MovieFileActivity::class.java)
+                    intent.putExtra("movie_id", it.id)
+                    startActivity(intent)
 
-
-                    Toast.makeText(this, "Clicked on ${it.title}", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, "Clicked on ${it.title}", Toast.LENGTH_LONG).show()
                 }))
 
         grid.adapter = adapter
@@ -98,8 +91,6 @@ open class MovieListActivity : AppCompatActivity() {
         })
     }
 
-
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (getResources().getConfiguration().orientation === Configuration.ORIENTATION_PORTRAIT) {
@@ -126,10 +117,5 @@ open class MovieListActivity : AppCompatActivity() {
                 return true
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables?.clear()
     }
 }
