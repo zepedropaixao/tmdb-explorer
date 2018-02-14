@@ -58,7 +58,7 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
         fun bindMovie(movie: Movie) {
             this.movie = movie
             GlideApp.with(view.context)
-                    .load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
+                    .load("https://image.tmdb.org/t/p/w500${movie.poster_path}")
                     .thumbnail(Glide.with(view.context).load(R.drawable.loader))
                     .into(view.itemImage)
             view.itemDate.text = movie.release_date

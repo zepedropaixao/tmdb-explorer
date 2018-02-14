@@ -8,3 +8,5 @@ import android.view.ViewGroup
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
+
+fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
