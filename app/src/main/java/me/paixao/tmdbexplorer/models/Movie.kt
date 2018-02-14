@@ -3,6 +3,7 @@ package me.paixao.tmdbexplorer.models
 data class Movie(
         val id: Long,
         val poster_path: String,
+        val backdrop_path: String,
         val adult: Boolean,
         val overview: String,
         val release_date : String,
