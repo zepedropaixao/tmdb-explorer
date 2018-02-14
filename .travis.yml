@@ -2,24 +2,58 @@ language: android
 jdk: oraclejdk8
 sudo: false
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+env:
+  global:
+    - COMPILE_SDK_VERSION=27 # Same as `compileSdkVersion` in build.gradle
+    - EMULATOR_API=27
+    - BUILD_TOOLS_VERSION=27.0.2 # Same as `buildToolsVersion` in build.gradle
+    - ABI=armeabi-v7a # ARM ABI v7a by default
+    - ADB_INSTALL_TIMEOUT=5 # minutes
+
 android:
   components:
+    - tools # Update android-sdk (also called android-sdk-tools)
     - platform-tools
-    - tools
-    - build-tools-27.0.2
-    - android-27
-    - android-23
-    - sys-img-armeabi-v7a-android-23
-    - extra-android-m2repository
+    - tools # Write the second time to update to thes newest as described in the document
+    - build-tools-${BUILD_TOOLS_VERSION} # For building
+    - android-${COMPILE_SDK_VERSION} # For building
+    - android-${EMULATOR_API} # For testing
+
+    - extra-android-m2repository # Support library
+
+    - sys-img-${ABI}-android-${EMULATOR_API} # Emulator image
+
+notifications:
+  email: false
+
+before_install:
+  - chmod +x gradlew
+  - yes | sdkmanager "platforms;android-${COMPILE_SDK_VERSION}"
+
+install:
+  - sdkmanager --list || true # Debug / Observation
+  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" #&> /dev/null
+  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2" #&> /dev/null
+  - avdmanager --list || true  # Debug / Observation
 
 before_script:
-  # Create and start emulator
-  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
+    #  - echo no | avdmanager create avd -n test -k android-${EMULATOR_API} -f --abi ${ABI} --tag "$TAG"
+  - echo no | android create avd --force -n test -t android-${EMULATOR_API} --abi ${ABI}
+  - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-before_install:
-- yes | sdkmanager "platforms;android-23"
+script:
+  - ./gradlew assembleRelease
+  - ./gradlew :app:createDebugAndroidTestCoverageReport --info --stacktrace
 
-script: ./gradlew connectedAndroidTest
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
