@@ -34,16 +34,20 @@ class MoviesRepository(
 
     fun initListOfMovies() {
         isLoadingData = true
-        listOfMovies.addSource(moviesLocalDataSource.getMovies(),
+        val localMovies: LiveData<List<Movie>> = moviesLocalDataSource.getMovies()
+        val remoteMovies: LiveData<List<Movie>> = moviesRemoteDataSource.getMovies()
+        listOfMovies.addSource(localMovies,
                 { data ->
                     if (!onlineArrivedFirst) listOfMovies.value = data
                     isLoadingData = false
+                    listOfMovies.removeSource(localMovies)
                 })
-        listOfMovies.addSource(moviesRemoteDataSource.getMovies(),
+        listOfMovies.addSource(remoteMovies,
                 { data ->
                     listOfMovies.value = data
                     onlineArrivedFirst = true
                     isLoadingData = false
+                    listOfMovies.removeSource(remoteMovies)
                 })
     }
 
@@ -65,8 +69,21 @@ class MoviesRepository(
     }
 
     override fun getMovies(pageNr: Int): LiveData<List<Movie>> {
-        moviesLocalDataSource.getMovies(pageNr)
-        moviesRemoteDataSource.getMovies(pageNr)
+        val localMovies: LiveData<List<Movie>> = moviesLocalDataSource.getMovies(pageNr)
+        val remoteMovies: LiveData<List<Movie>> = moviesRemoteDataSource.getMovies(pageNr)
+        listOfMovies.addSource(localMovies,
+                { data ->
+                    if (!onlineArrivedFirst) listOfMovies.value = data
+                    isLoadingData = false
+                    listOfMovies.removeSource(localMovies)
+                })
+        listOfMovies.addSource(remoteMovies,
+                { data ->
+                    listOfMovies.value = data
+                    onlineArrivedFirst = true
+                    isLoadingData = false
+                    listOfMovies.removeSource(remoteMovies)
+                })
         return listOfMovies
     }
 

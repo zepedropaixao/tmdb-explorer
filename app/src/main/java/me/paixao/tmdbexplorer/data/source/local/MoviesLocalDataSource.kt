@@ -26,7 +26,7 @@ class MoviesLocalDataSource private constructor(
     }
 
     override fun getMovies(pageNr: Int): LiveData<List<Movie>> {
-        TODO()
+        return listOfMovies
     }
 
     /**

@@ -10,7 +10,6 @@ import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.data.source.MoviesDataSource
 
 
-
 /**
  * Implementation of the data source that adds a latency simulating network.
  */
@@ -21,8 +20,6 @@ class MoviesRemoteDataSource private constructor(
     private val apiService = TMDbAPI.create()
 
     private val data = MutableLiveData<List<Movie>>()
-
-
 
 
     /*fun discoverMoreMovies(): io.reactivex.Flowable<Result> {
@@ -40,15 +37,15 @@ class MoviesRemoteDataSource private constructor(
      * returns an error.
      */
     override fun getMovies(): LiveData<List<Movie>> {
-        val listMovies: LiveData<List<Movie>> = Transformations.map(
-                apiService.discover(apiKey, "popularity.desc", 1), { data ->
-            data.body?.results
-        })
-        return listMovies
+        return getMovies(1)
     }
 
     override fun getMovies(pageNr: Int): LiveData<List<Movie>> {
-        TODO()
+        val listMovies: LiveData<List<Movie>> = Transformations.map(
+                apiService.discover(apiKey, "popularity.desc", pageNr), { data ->
+            data.body?.results
+        })
+        return listMovies
     }
 
     /**
