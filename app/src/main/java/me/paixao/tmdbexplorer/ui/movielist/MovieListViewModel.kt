@@ -24,6 +24,10 @@ class MovieListViewModel(
 ) : AndroidViewModel(context) {
 
     var listOfMovies: LiveData<List<Movie>> = moviesRepository.listOfMovies
+
+    val completeListOfMovies: List<Movie>
+        get() = moviesRepository.completeList
+
     internal val openMovieEvent = SingleLiveEvent<String>()
     val snackbarMessage = SingleLiveEvent<Int>()
 

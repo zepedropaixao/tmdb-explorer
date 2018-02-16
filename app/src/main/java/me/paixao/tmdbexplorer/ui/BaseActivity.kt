@@ -2,6 +2,7 @@ package me.paixao.tmdbexplorer.ui.movielist
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -44,6 +45,10 @@ open class BaseActivity : AppCompatActivity() {
 
     fun <T : ViewModel> obtainViewModel(viewModelClass: Class<T>) =
             ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
+
+
+
+    fun isLandscape() = getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT
 
     override fun onDestroy() {
         super.onDestroy()

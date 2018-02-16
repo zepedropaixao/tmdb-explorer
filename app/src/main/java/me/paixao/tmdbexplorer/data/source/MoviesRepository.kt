@@ -5,6 +5,7 @@ import android.arch.lifecycle.MediatorLiveData
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.data.source.local.MoviesLocalDataSource
 import me.paixao.tmdbexplorer.data.source.remote.MoviesRemoteDataSource
+import me.paixao.tmdbexplorer.utils.addAllIfNotIn
 
 /**
  * Concrete implementation to load movies from the data sources into a cache.
@@ -19,36 +20,14 @@ class MoviesRepository(
         val moviesLocalDataSource: MoviesLocalDataSource
 ) : MoviesDataSource {
 
-
     var isLoadingData: Boolean = false
-
     var listOfMovies = MediatorLiveData<List<Movie>>()
-
+    var completeList = mutableListOf<Movie>()
     var onlineArrivedFirst: Boolean = false
-
     var page: Int = 1
 
     init {
-        initListOfMovies()
-    }
-
-    fun initListOfMovies() {
-        isLoadingData = true
-        val localMovies: LiveData<List<Movie>> = moviesLocalDataSource.getMovies()
-        val remoteMovies: LiveData<List<Movie>> = moviesRemoteDataSource.getMovies()
-        listOfMovies.addSource(localMovies,
-                { data ->
-                    if (!onlineArrivedFirst) listOfMovies.value = data
-                    isLoadingData = false
-                    listOfMovies.removeSource(localMovies)
-                })
-        listOfMovies.addSource(remoteMovies,
-                { data ->
-                    listOfMovies.value = data
-                    onlineArrivedFirst = true
-                    isLoadingData = false
-                    listOfMovies.removeSource(remoteMovies)
-                })
+        getMovies()
     }
 
     /**
@@ -60,7 +39,7 @@ class MoviesRepository(
      * get the data.
      */
     override fun getMovies(): LiveData<List<Movie>> {
-        return listOfMovies
+        return getMovies(1)
     }
 
     fun getMoreMovies(): LiveData<List<Movie>> {
@@ -69,17 +48,24 @@ class MoviesRepository(
     }
 
     override fun getMovies(pageNr: Int): LiveData<List<Movie>> {
+        isLoadingData = true
         val localMovies: LiveData<List<Movie>> = moviesLocalDataSource.getMovies(pageNr)
         val remoteMovies: LiveData<List<Movie>> = moviesRemoteDataSource.getMovies(pageNr)
         listOfMovies.addSource(localMovies,
                 { data ->
-                    if (!onlineArrivedFirst) listOfMovies.value = data
+                    if (!onlineArrivedFirst && data != null) {
+                        listOfMovies.value = data
+                        completeList.addAllIfNotIn(data)
+                    }
                     isLoadingData = false
                     listOfMovies.removeSource(localMovies)
                 })
         listOfMovies.addSource(remoteMovies,
                 { data ->
-                    listOfMovies.value = data
+                    if (data != null) {
+                        listOfMovies.value = data
+                        completeList.addAllIfNotIn(data)
+                    }
                     onlineArrivedFirst = true
                     isLoadingData = false
                     listOfMovies.removeSource(remoteMovies)

@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.recyclerview_movie_list_item.view.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.utils.GlideApp
+import me.paixao.tmdbexplorer.utils.addAllIfNotIn
 import me.paixao.tmdbexplorer.utils.inflate
 
 
@@ -44,7 +45,7 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
 
     fun addMovies(newMovies: List<Movie>?) {
         if (newMovies != null) {
-            this.movies.addAll(newMovies)
+            this.movies.addAllIfNotIn(newMovies)
             notifyDataSetChanged()
         }
     }
@@ -70,3 +71,5 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
         }
     }
 }
+
+
