@@ -1,22 +1,21 @@
-package me.paixao.tmdbexplorer.ui.mainlist
+package me.paixao.tmdbexplorer.ui.movielist
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import io.reactivex.disposables.CompositeDisposable
 import me.paixao.tmdbexplorer.R
-import me.paixao.tmdbexplorer.comm.repositories.MovieRepository
-import me.paixao.tmdbexplorer.comm.repositories.MovieRepositoryProvider
+import me.paixao.tmdbexplorer.utils.ViewModelFactory
 
 open class BaseActivity : AppCompatActivity() {
 
     protected val disposables = CompositeDisposable()
-    protected lateinit var repository: MovieRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository = MovieRepositoryProvider.provideRepository()
     }
 
 
@@ -42,6 +41,9 @@ open class BaseActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    fun <T : ViewModel> obtainViewModel(viewModelClass: Class<T>) =
+            ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
 
     override fun onDestroy() {
         super.onDestroy()

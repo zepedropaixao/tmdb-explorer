@@ -1,16 +1,8 @@
 package me.paixao.tmdbexplorer.ui.moviefile
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import com.bumptech.glide.Glide
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_movie_file.*
 import me.paixao.tmdbexplorer.R
-import me.paixao.tmdbexplorer.ui.mainlist.BaseActivity
-import me.paixao.tmdbexplorer.utils.GlideApp
-import me.paixao.tmdbexplorer.utils.format
+import me.paixao.tmdbexplorer.ui.movielist.BaseActivity
 
 class MovieFileActivity : BaseActivity() {
 
@@ -22,7 +14,7 @@ class MovieFileActivity : BaseActivity() {
 
 
 
-        disposables.add(repository.getMovie(intent.getLongExtra("movie_id", 1))
+        /*disposables.add(repository.getMovie(intent.getLongExtra("movie_id", 1))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ result ->
@@ -52,7 +44,7 @@ class MovieFileActivity : BaseActivity() {
                     error.printStackTrace()
                     Log.e("Error", error.message)
                     repository.isLoadingData = false
-                }))
+                }))*/
     }
 
 }

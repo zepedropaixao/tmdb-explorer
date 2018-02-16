@@ -1,20 +1,21 @@
-package me.paixao.tmdbexplorer.ui.mainlist
+package me.paixao.tmdbexplorer.ui.movielist
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
+import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.ui.moviefile.MovieFileActivity
 
 open class MovieListActivity : BaseActivity() {
+
+    private lateinit var viewModel: MovieListViewModel
 
     private lateinit var adapter: MovieListAdapter
     private lateinit var layoutManager: GridLayoutManager
@@ -26,14 +27,25 @@ open class MovieListActivity : BaseActivity() {
         setContentView(R.layout.activity_movie_list)
         setTitle("moviExplorer")
         setSupportActionBar(toolbar)
-
         setupRecyclerView()
         setRecyclerViewScrollListener()
+        initViewModel()
+    }
 
-        /*RxView.clicks(button)
-                .subscribe({ aVoid ->
-                    //Perform some work here//
-                })*/
+    private fun initViewModel() {
+        viewModel = obtainViewModel().apply {
+            listOfMovies.observe(this@MovieListActivity, Observer<List<Movie>> { movieList ->
+                if(viewModel.getPage() == 1) {
+                    adapter.reset(movieList)
+                } else {
+                    adapter.addMovies(movieList)
+                }
+            })
+            // Subscribe to "new task" event
+            /*newTaskEvent.observe(this@MovieListActivity, Observer<Void> {
+                this@MovieListActivity.addNewTask()
+            })*/
+        }
     }
 
     fun setupRecyclerView() {
@@ -50,23 +62,14 @@ open class MovieListActivity : BaseActivity() {
                     val intent = Intent(this, MovieFileActivity::class.java)
                     intent.putExtra("movie_id", it.id)
                     startActivity(intent)
-
-                    //Toast.makeText(this, "Clicked on ${it.title}", Toast.LENGTH_LONG).show()
                 }))
 
         grid.adapter = adapter
 
-        disposables.add(repository.discoverMovies()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    adapter.reset(result.results)
-                    repository.isLoadingData = false
-                }, { error ->
-                    error.printStackTrace()
-                    Log.e("Error", error.message)
-                    repository.isLoadingData = false
-                }))
+        /*movieListViewModel?.getMovieList()?.observe(this, Observer { movieList ->
+            adapter.reset(movieList)
+            //repository.isLoadingData = false
+        })*/
     }
 
     private fun setRecyclerViewScrollListener() {
@@ -74,8 +77,13 @@ open class MovieListActivity : BaseActivity() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 val totalItemCount = recyclerView!!.layoutManager.itemCount
-                if (!repository.isLoadingData && totalItemCount <= lastVisibleItemPosition + 6) {
-                    disposables.add(repository.discoverMoreMovies()
+                if (!viewModel.isLoadingData() && totalItemCount <= lastVisibleItemPosition + 6) {
+
+                    viewModel.getMoreMovies()
+
+
+
+                    /*disposables.add(repository.discoverMoreMovies()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
@@ -85,7 +93,7 @@ open class MovieListActivity : BaseActivity() {
                                 error.printStackTrace()
                                 Log.e("Error", error.message)
                                 repository.isLoadingData = false
-                            }))
+                            }))*/
                 }
             }
         })
@@ -118,4 +126,7 @@ open class MovieListActivity : BaseActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
+    fun obtainViewModel(): MovieListViewModel = obtainViewModel(MovieListViewModel::class.java)
 }

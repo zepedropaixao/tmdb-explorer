@@ -1,4 +1,4 @@
-package me.paixao.tmdbexplorer.ui.mainlist
+package me.paixao.tmdbexplorer.ui.movielist
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.recyclerview_movie_list_item.view.*
 import me.paixao.tmdbexplorer.R
-import me.paixao.tmdbexplorer.models.Movie
+import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.utils.GlideApp
 import me.paixao.tmdbexplorer.utils.inflate
 
@@ -34,15 +34,19 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
         return clickEvent
     }
 
-    fun reset(newMovies: List<Movie>) {
-        this.movies.clear()
-        this.movies.addAll(newMovies)
-        notifyDataSetChanged()
+    fun reset(newMovies: List<Movie>?) {
+        if (newMovies != null) {
+            this.movies.clear()
+            this.movies.addAll(newMovies)
+            notifyDataSetChanged()
+        }
     }
 
-    fun addMovies(newMovies: List<Movie>) {
-        this.movies.addAll(newMovies)
-        notifyDataSetChanged()
+    fun addMovies(newMovies: List<Movie>?) {
+        if (newMovies != null) {
+            this.movies.addAll(newMovies)
+            notifyDataSetChanged()
+        }
     }
 
     inner class MovieHolder(v: View) : RecyclerView.ViewHolder(v) {
