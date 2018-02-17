@@ -22,6 +22,7 @@ class MoviesRepository(
 
     var isLoadingData: Boolean = false
     var listOfMovies = MediatorLiveData<List<Movie>>()
+    val myMovie = MediatorLiveData<Movie>()
     var completeList = mutableListOf<Movie>()
     var onlineArrivedFirst: Boolean = false
     var page: Int = 1
@@ -65,6 +66,7 @@ class MoviesRepository(
                     if (data != null) {
                         listOfMovies.value = data
                         completeList.addAllIfNotIn(data)
+                        moviesLocalDataSource.saveMoviedOnDB(data)
                     }
                     onlineArrivedFirst = true
                     isLoadingData = false
@@ -82,14 +84,21 @@ class MoviesRepository(
      * get the data.
      */
     override fun getMovie(movieId: Long): LiveData<Movie?> {
-        val myMovie = MediatorLiveData<Movie?>()
-        var onlineArrivedFirst: Boolean = false
+        isLoadingData = true
+        onlineArrivedFirst = false
+        myMovie.addSource(moviesLocalDataSource.getMovie(movieId),
+                { data ->
+                    if (!onlineArrivedFirst)
+                        myMovie.value = data
 
-        myMovie.addSource(moviesLocalDataSource.getMovie(movieId), { data -> if (!onlineArrivedFirst) myMovie.value = data })
+                    isLoadingData = false
+                })
         myMovie.addSource(moviesRemoteDataSource.getMovie(movieId),
                 { data ->
                     myMovie.value = data
                     onlineArrivedFirst = true
+
+                    isLoadingData = false
                 })
         return myMovie
     }

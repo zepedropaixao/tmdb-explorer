@@ -1,20 +1,29 @@
-package me.paixao.tmdbexplorer.ui.moviefile
+package me.paixao.tmdbexplorer.ui.moviedetail
 
+import android.arch.lifecycle.Observer
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import me.paixao.tmdbexplorer.R
+import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.databinding.ActivityMovieDetailBinding
 import me.paixao.tmdbexplorer.ui.movielist.BaseActivity
 
-class MovieFileActivity : BaseActivity() {
+class MovieDetailActivity : BaseActivity() {
+
+
+    private lateinit var viewModel: MovieDetailViewModel
+    private lateinit var binding: ActivityMovieDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_file)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail)
+        binding.setLifecycleOwner(this)
         title = "moviExplorer"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        initViewModel()
 
 
-
-        /*disposables.add(repository.getMovie(intent.getLongExtra("movie_id", 1))
+        /*disposables.add(repository.getMovieWithId(intent.getLongExtra("movie_id", 1))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ result ->
@@ -46,5 +55,17 @@ class MovieFileActivity : BaseActivity() {
                     repository.isLoadingData = false
                 }))*/
     }
+
+    private fun initViewModel() {
+        viewModel = obtainViewModel()
+        binding.viewmodel = viewModel
+        viewModel.getMovieWithId(intent.getLongExtra("movie_id", 1)).observe(this@MovieDetailActivity, Observer<Movie?> { movie ->
+            // Bind movie to view binder
+            title = movie?.title
+        })
+    }
+
+
+    fun obtainViewModel(): MovieDetailViewModel = obtainViewModel(MovieDetailViewModel::class.java)
 
 }

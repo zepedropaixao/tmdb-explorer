@@ -36,6 +36,14 @@ interface MoviesDao {
     fun insertMovie(movie: Movie)
 
     /**
+     * Insert a list of movies in the database. If the movie already exists, replace it.
+     *
+     * @param movie the movie to be inserted.
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMovies(movie: List<Movie>)
+
+    /**
      * Update a movie.
      *
      * @param movie movie to be updated

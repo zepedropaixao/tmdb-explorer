@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.moviefile.MovieFileActivity">
+        <activity android:name=".ui.moviedetail.MovieDetailActivity">
 
         </activity>
     </application>

@@ -29,6 +29,10 @@ class MoviesLocalDataSource private constructor(
         return listOfMovies
     }
 
+    fun saveMoviedOnDB(movies: List<Movie>) {
+        appExecutors.diskIO.execute { moviesDao.insertMovies(movies) }
+    }
+
     /**
      * Note: [GetMovieCallback.onDataNotAvailable] is fired if the [Movie] isn't
      * found.

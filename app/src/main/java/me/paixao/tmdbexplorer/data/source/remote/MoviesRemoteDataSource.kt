@@ -27,7 +27,7 @@ class MoviesRemoteDataSource private constructor(
         return apiService.discover(apiKey, "popularity.desc", page)
     }
 
-    fun getMovie(movieId: Long): io.reactivex.Flowable<Movie> {
+    fun getMovieWithId(movieId: Long): io.reactivex.Flowable<Movie> {
         return apiService.get(movieId, apiKey)
     }*/
 

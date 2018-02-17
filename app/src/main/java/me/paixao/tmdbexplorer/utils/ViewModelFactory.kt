@@ -10,6 +10,7 @@ import me.paixao.tmdbexplorer.data.source.MoviesRepository
 import me.paixao.tmdbexplorer.data.source.local.MoviesLocalDataSource
 import me.paixao.tmdbexplorer.data.source.local.TMDBExplorerDatabase
 import me.paixao.tmdbexplorer.data.source.remote.MoviesRemoteDataSource
+import me.paixao.tmdbexplorer.ui.moviedetail.MovieDetailViewModel
 import me.paixao.tmdbexplorer.ui.movielist.MovieListViewModel
 
 
@@ -30,6 +31,8 @@ class ViewModelFactory private constructor(
                 when {
                     isAssignableFrom(MovieListViewModel::class.java) ->
                         MovieListViewModel(application, moviesRepository)
+                    isAssignableFrom(MovieDetailViewModel::class.java) ->
+                        MovieDetailViewModel(application, moviesRepository)
                     else ->
                         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }

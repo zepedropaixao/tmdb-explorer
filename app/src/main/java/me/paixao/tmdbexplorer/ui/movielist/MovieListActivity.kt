@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
-import me.paixao.tmdbexplorer.ui.moviefile.MovieFileActivity
+import me.paixao.tmdbexplorer.ui.moviedetail.MovieDetailActivity
 
 open class MovieListActivity : BaseActivity() {
 
@@ -55,7 +55,7 @@ open class MovieListActivity : BaseActivity() {
 
         disposables.add(adapter.getViewClickedObservable()
                 .subscribe({
-                    val intent = Intent(this, MovieFileActivity::class.java)
+                    val intent = Intent(this, MovieDetailActivity::class.java)
                     intent.putExtra("movie_id", it.id)
                     startActivity(intent)
                 }))
