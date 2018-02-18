@@ -15,7 +15,7 @@ interface MoviesDao {
      *
      * @return all movies.
      */
-    @Query("SELECT * FROM movies")
+    @Query("SELECT * FROM movies ORDER BY popularity DESC")
     fun getMovies(): LiveData<List<Movie>>
 
     /**
