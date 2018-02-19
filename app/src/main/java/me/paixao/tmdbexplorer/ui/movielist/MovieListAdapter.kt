@@ -1,17 +1,16 @@
 package me.paixao.tmdbexplorer.ui.movielist
 
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
+import com.android.databinding.library.baseAdapters.BR
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.recyclerview_movie_list_item.view.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
-import me.paixao.tmdbexplorer.utils.GlideApp
 import me.paixao.tmdbexplorer.utils.addAllIfNotIn
-import me.paixao.tmdbexplorer.utils.inflate
 
 
 class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
@@ -19,13 +18,16 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
     private val clickSubject = PublishSubject.create<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
-        val inflatedView = parent.inflate(R.layout.recyclerview_movie_list_item, false)
-        return MovieHolder(inflatedView)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding: ViewDataBinding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.recyclerview_movie_list_item, parent, false)
+
+        return MovieHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        val item = movies[position]
-        holder.bindMovie(item)
+        holder.bind(movies[position])
     }
 
     override fun getItemCount() = movies.size
@@ -50,24 +52,16 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
         }
     }
 
-    inner class MovieHolder(v: View) : RecyclerView.ViewHolder(v) {
-        private var view: View = v
-        private var movie: Movie? = null
-
+    inner class MovieHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            v.setOnClickListener {
+            binding.root.setOnClickListener {
                 clickSubject.onNext(movies[layoutPosition])
             }
         }
 
-        fun bindMovie(movie: Movie) {
-            this.movie = movie
-            GlideApp.with(view.context)
-                    .load("https://image.tmdb.org/t/p/w500${movie.poster_path}")
-                    .thumbnail(Glide.with(view.context).load(R.drawable.loader))
-                    .into(view.itemImage)
-            view.itemDate.text = movie.release_date
-            view.itemDescription.text = movie.title
+        fun bind(movie: Movie) {
+            binding.setVariable(BR.movie, movie)
+            binding.executePendingBindings()
         }
     }
 }
