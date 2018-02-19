@@ -5,7 +5,9 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.databinding.BaseObservable
 import android.databinding.Bindable
+import io.reactivex.Observable
 import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.MoviesRepository
 import me.paixao.tmdbexplorer.utils.SingleLiveEvent
 
@@ -31,8 +33,12 @@ class MovieListViewModel(
     internal val openMovieEvent = SingleLiveEvent<String>()
     val snackbarMessage = SingleLiveEvent<Int>()
 
-    fun getMovieList(): LiveData<List<Movie>>? {
-        return listOfMovies
+    fun getMovieList() {
+        moviesRepository.getMovies()
+    }
+
+    fun searchMovies(query: String): Observable<MovieList> {
+        return moviesRepository.searchMovies(query)
     }
 
     private fun showSnackbarMessage(message: Int) {

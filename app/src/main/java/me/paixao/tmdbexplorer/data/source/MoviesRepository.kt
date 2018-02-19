@@ -3,7 +3,9 @@ package me.paixao.tmdbexplorer.data.source
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.util.Log
+import io.reactivex.Observable
 import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.local.MoviesLocalDataSource
 import me.paixao.tmdbexplorer.data.source.remote.MoviesRemoteDataSource
 import me.paixao.tmdbexplorer.utils.addAllIfNotIn
@@ -56,7 +58,6 @@ class MoviesRepository(
         listOfMovies.addSource(localMovies,
                 { data ->
                     if (!onlineArrivedFirst && data != null) {
-                        Log.e("ERROR", "ADDING OFFLINE")
                         listOfMovies.value = data
                         completeList.addAllIfNotIn(data)
                     }
@@ -76,6 +77,11 @@ class MoviesRepository(
                     listOfMovies.removeSource(remoteMovies)
                 })
         return listOfMovies
+    }
+
+    override fun searchMovies(query: String): Observable<MovieList> {
+        isLoadingData = true
+        return moviesRemoteDataSource.searchMovies(query)
     }
 
     /**

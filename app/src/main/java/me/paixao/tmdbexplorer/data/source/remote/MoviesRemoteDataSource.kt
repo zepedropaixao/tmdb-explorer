@@ -5,8 +5,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.support.annotation.VisibleForTesting
 import com.example.android.architecture.blueprints.todoapp.util.AppExecutors
+import io.reactivex.Observable
 import me.paixao.tmdbexplorer.comm.interfaces.TMDbAPI
 import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.MoviesDataSource
 
 
@@ -16,6 +18,7 @@ import me.paixao.tmdbexplorer.data.source.MoviesDataSource
 class MoviesRemoteDataSource private constructor(
         val appExecutors: AppExecutors
 ) : MoviesDataSource {
+
     private val apiKey = "83d01f18538cb7a275147492f84c3698"
     private val apiService = TMDbAPI.create()
 
@@ -46,6 +49,10 @@ class MoviesRemoteDataSource private constructor(
             data.body?.results
         })
         return listMovies
+    }
+
+    override fun searchMovies(query: String): Observable<MovieList> {
+        return apiService.search(apiKey, query)
     }
 
     /**

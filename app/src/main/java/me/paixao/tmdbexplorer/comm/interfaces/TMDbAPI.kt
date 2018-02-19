@@ -2,6 +2,7 @@ package me.paixao.tmdbexplorer.comm.interfaces
 
 
 import android.arch.lifecycle.LiveData
+import io.reactivex.Observable
 import me.paixao.tmdbexplorer.BuildConfig
 import me.paixao.tmdbexplorer.comm.ApiResponse
 import me.paixao.tmdbexplorer.data.Movie
@@ -10,6 +11,7 @@ import me.paixao.tmdbexplorer.utils.LiveDataCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,8 +21,7 @@ interface TMDbAPI {
 
     @GET("search/movie")
     fun search(@Query("api_key") apiKey: String,
-               @Query("query") query: String,
-               @Query("page") page: Int): LiveData<ApiResponse<MovieList>>
+               @Query("query") query: String): Observable<MovieList>
 
     @GET("discover/movie")
     fun discover(@Query("api_key") apiKey: String,
@@ -49,6 +50,7 @@ interface TMDbAPI {
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
 
             return retrofit.create(TMDbAPI::class.java)

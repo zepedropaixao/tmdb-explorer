@@ -3,7 +3,9 @@ package me.paixao.tmdbexplorer.data.source.local
 import android.arch.lifecycle.LiveData
 import android.support.annotation.VisibleForTesting
 import com.example.android.architecture.blueprints.todoapp.util.AppExecutors
+import io.reactivex.Observable
 import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.MoviesDataSource
 
 
@@ -14,6 +16,7 @@ class MoviesLocalDataSource private constructor(
         val appExecutors: AppExecutors,
         val moviesDao: MoviesDao
 ) : MoviesDataSource {
+
 
     private val listOfMovies: LiveData<List<Movie>> = moviesDao.getMovies()
 
@@ -27,6 +30,10 @@ class MoviesLocalDataSource private constructor(
 
     override fun getMovies(pageNr: Int): LiveData<List<Movie>> {
         return listOfMovies
+    }
+
+    override fun searchMovies(query: String): Observable<MovieList> {
+        TODO("Search only works online")
     }
 
     fun saveMoviedOnDB(movies: List<Movie>) {

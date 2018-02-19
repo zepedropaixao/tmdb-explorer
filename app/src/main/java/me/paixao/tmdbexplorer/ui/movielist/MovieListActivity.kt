@@ -5,10 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.ui.moviedetail.MovieDetailActivity
+import me.paixao.tmdbexplorer.utils.RxSearchObservable
+import java.util.concurrent.TimeUnit
+
 
 open class MovieListActivity : BaseActivity() {
 
@@ -55,6 +61,28 @@ open class MovieListActivity : BaseActivity() {
                     intent.putExtra("movie_id", it.id)
                     startActivity(intent)
                 }))
+
+        disposables.add(RxSearchObservable.fromView(search)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .filter { text ->
+                    !text.isEmpty()
+                }
+                .distinctUntilChanged()
+                .switchMap { query ->
+                    viewModel.searchMovies(query)
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{
+                    Log.e("Error", "RESP: "+it.results)
+                    adapter.reset(it.results)
+                })
+        
+        search.setOnCloseListener {
+            adapter.reset(listOf())
+            viewModel.getMovieList()
+            true
+        }
 
         grid.adapter = adapter
     }
