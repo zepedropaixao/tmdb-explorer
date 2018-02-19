@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TMDb expLorer</string>
+    <string name="app_name">moviExplorer</string>
     <string name="min">min</string>
     <string name="revenue">Revenue</string>
     <string name="budget">Budget</string>

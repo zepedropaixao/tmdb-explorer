@@ -27,10 +27,10 @@ open class MovieListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
-        setTitle("moviExplorer")
         setSupportActionBar(toolbar)
         setupRecyclerView()
         setRecyclerViewScrollListener()
+        setupSearchView()
         initViewModel()
     }
 
@@ -62,6 +62,10 @@ open class MovieListActivity : BaseActivity() {
                     startActivity(intent)
                 }))
 
+        grid.adapter = adapter
+    }
+
+    fun setupSearchView() {
         disposables.add(RxSearchObservable.fromView(search)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .filter { text ->
@@ -73,18 +77,16 @@ open class MovieListActivity : BaseActivity() {
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{
-                    Log.e("Error", "RESP: "+it.results)
+                .subscribe {
+                    Log.e("Error", "RESP: " + it.results)
                     adapter.reset(it.results)
                 })
-        
+
         search.setOnCloseListener {
             adapter.reset(listOf())
             viewModel.getMovieList()
             true
         }
-
-        grid.adapter = adapter
     }
 
     private fun setRecyclerViewScrollListener() {
