@@ -80,9 +80,14 @@ open class MovieListActivity : BaseActivity() {
                     adapter.reset(it.results)
                 })
 
+        search.setOnSearchClickListener {
+            search.maxWidth = Integer.MAX_VALUE
+        }
+
         search.setOnCloseListener {
             adapter.reset(listOf())
             viewModel.getMovieList()
+            search.onActionViewCollapsed()
             true
         }
     }
