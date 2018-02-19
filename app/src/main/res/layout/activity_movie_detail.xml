@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="viewmodel"
             type="me.paixao.tmdbexplorer.ui.moviedetail.MovieDetailViewModel" />
@@ -24,6 +27,7 @@
                 <ImageView
                     android:id="@+id/backdrop"
                     android:layout_width="match_parent"
+                    app:imagesrc="@{viewmodel.movie.backdrop_path}"
                     android:layout_height="200dp" />
 
                 <LinearLayout
@@ -52,6 +56,7 @@
                             android:layout_height="wrap_content"
                             android:isIndicator="true"
                             android:numStars="5"
+                            android:progress="@{viewmodel.movieRating}"
                             android:stepSize="0.05"
                             android:theme="@style/RatingBar"
                             android:visibility="gone" />
@@ -61,6 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:text="@{viewmodel.movieVoteAverage}"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -74,6 +80,7 @@
                             android:id="@+id/movie_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@{viewmodel.movieDuration}"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -82,7 +89,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:textColor="@android:color/white"
+                            android:text="@{viewmodel.movieBudget}"
+                            android:textColor="@{viewmodel.movieRevenueColor}"
                             android:textSize="12sp" />
                     </LinearLayout>
 
