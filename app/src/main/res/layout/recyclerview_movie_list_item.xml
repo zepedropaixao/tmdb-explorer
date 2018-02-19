@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="movie"
-            type="me.paixao.tmdbexplorer.data.Movie" />
+            name="viewmodel"
+            type="me.paixao.tmdbexplorer.ui.movielist.MovieListItemViewModel" />
 
     </data>
 
@@ -23,7 +23,7 @@
             android:layout_height="170dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            app:imagesrc="@{movie.poster_path}" />
+            app:imagesrc="@{viewmodel.movie.poster_path}" />
 
         <TextView
             android:id="@+id/itemDate"
@@ -32,7 +32,7 @@
             android:layout_gravity="top|start"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white"
-            tools:text="@{movie.release_date}" />
+            tools:text="@{viewmodel.movie.release_date}" />
 
         <TextView
             android:id="@+id/itemDescription"
@@ -42,7 +42,7 @@
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{movie.overview}"
+            android:text="@{viewmodel.movie.overview}"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

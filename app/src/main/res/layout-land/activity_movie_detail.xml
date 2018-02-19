@@ -56,7 +56,7 @@
                             android:layout_height="wrap_content"
                             android:isIndicator="true"
                             android:numStars="5"
-                            android:progress="@{viewmodel.movieRating}"
+                            android:progress="@{safeUnbox(viewmodel.movieRating)}"
                             android:stepSize="0.05"
                             android:theme="@style/RatingBar"
                             android:visibility="gone" />
@@ -90,7 +90,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:text="@{viewmodel.movieBudget}"
-                            android:textColor="@{viewmodel.movieRevenueColor}"
+                            android:textColor="@{safeUnbox(viewmodel.movieRevenueColor)}"
                             android:textSize="12sp" />
                     </LinearLayout>
 
