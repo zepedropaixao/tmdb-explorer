@@ -37,10 +37,6 @@ open class MovieListActivity : BaseActivity() {
                     adapter.addMovies(movieList)
                 }
             })
-            // Subscribe to "new task" event
-            /*newTaskEvent.observe(this@MovieListActivity, Observer<Void> {
-                this@MovieListActivity.addNewTask()
-            })*/
         }
         if (!viewModel.completeListOfMovies.isEmpty())
             adapter.reset(viewModel.completeListOfMovies)

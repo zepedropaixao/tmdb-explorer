@@ -20,7 +20,6 @@ class MovieDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail)
         binding.setLifecycleOwner(this)
-        title = "moviExplorer"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         initViewModel()
     }
