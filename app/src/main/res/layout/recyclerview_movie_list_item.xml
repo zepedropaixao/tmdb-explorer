@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -31,8 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|start"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/white"
-            tools:text="@{viewmodel.movie.release_date}" />
+            android:textColor="@{safeUnbox(viewmodel.getDisplayDateColor)}"
+            android:text="@{viewmodel.getDisplayDate}"
+            android:typeface="@{viewmodel.getDateBoldStyle}"/>
 
         <TextView
             android:id="@+id/itemDescription"
@@ -42,7 +42,7 @@
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{viewmodel.movie.overview}"
+            android:text="@{viewmodel.movie.title}"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

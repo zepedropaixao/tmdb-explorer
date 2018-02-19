@@ -60,7 +60,7 @@ class MovieListAdapter(private val movies: MutableList<Movie>) : RecyclerView.Ad
         }
 
         fun bind(movie: Movie) {
-            binding.setVariable(BR.viewmodel, MovieListItemViewModel(movie))
+            binding.setVariable(BR.viewmodel, MovieListItemViewModel(binding.root.context, movie))
             binding.executePendingBindings()
         }
     }
