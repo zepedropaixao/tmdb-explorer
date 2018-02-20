@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
+import me.paixao.tmdbexplorer.ui.BaseActivity
 import me.paixao.tmdbexplorer.ui.moviedetail.MovieDetailActivity
 import me.paixao.tmdbexplorer.utils.RxSearchObservable
 import java.util.concurrent.TimeUnit

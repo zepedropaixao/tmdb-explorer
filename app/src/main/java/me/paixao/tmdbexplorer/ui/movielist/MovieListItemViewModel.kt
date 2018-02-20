@@ -11,7 +11,6 @@ import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class MovieListItemViewModel(val context: Context,
                              val movie: Movie) {
 

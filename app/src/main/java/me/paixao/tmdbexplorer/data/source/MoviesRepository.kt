@@ -2,7 +2,6 @@ package me.paixao.tmdbexplorer.data.source
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.util.Log
 import io.reactivex.Observable
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.data.MovieList
@@ -11,12 +10,7 @@ import me.paixao.tmdbexplorer.data.source.remote.MoviesRemoteDataSource
 import me.paixao.tmdbexplorer.utils.addAllIfNotIn
 
 /**
- * Concrete implementation to load movies from the data sources into a cache.
- *
- *
- * For simplicity, this implements a dumb synchronisation between locally persisted data and data
- * obtained from the server, by using the remote data source only if the local database doesn't
- * exist or is empty.
+ * Concrete implementation to load movies from the data sources.
  */
 class MoviesRepository(
         val moviesRemoteDataSource: MoviesRemoteDataSource,
@@ -35,12 +29,8 @@ class MoviesRepository(
     }
 
     /**
-     * Gets movies from cache, local data source (SQLite) or remote data source, whichever is
+     * Gets movies from local data source (SQLite) or remote data source, whichever is
      * available first.
-     *
-     *
-     * Note: [LoadMoviesCallback.onDataNotAvailable] is fired if all data sources fail to
-     * get the data.
      */
     override fun getMovies(): LiveData<List<Movie>> {
         return getMovies(1)
@@ -84,14 +74,6 @@ class MoviesRepository(
         return moviesRemoteDataSource.searchMovies(query)
     }
 
-    /**
-     * Gets movies from local data source (sqlite) unless the table is new or empty. In that case it
-     * uses the network data source. This is done to simplify the sample.
-     *
-     *
-     * Note: [GetMovieCallback.onDataNotAvailable] is fired if both data sources fail to
-     * get the data.
-     */
     override fun getMovie(movieId: Long): LiveData<Movie?> {
         isLoadingData = true
         onlineArrivedFirst = false
@@ -99,7 +81,6 @@ class MoviesRepository(
                 { data ->
                     if (!onlineArrivedFirst && data != null) {
                         myMovie.value = data
-                        Log.e("Errro", "" + data)
                     }
 
                     isLoadingData = false

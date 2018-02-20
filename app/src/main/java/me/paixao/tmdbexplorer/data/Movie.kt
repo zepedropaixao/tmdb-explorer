@@ -6,8 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 
 
 /**
- * Immutable model class for a Movie. In order to compile with Room, we can't use @JvmOverloads to
- * generate multiple constructors.
+ * Immutable model class for a Movie.
  */
 @Entity(tableName = "movies")
 data class Movie(

@@ -1,19 +1,18 @@
 package me.paixao.tmdbexplorer.data.source.remote
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.support.annotation.VisibleForTesting
-import com.example.android.architecture.blueprints.todoapp.util.AppExecutors
 import io.reactivex.Observable
 import me.paixao.tmdbexplorer.comm.interfaces.TMDbAPI
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.MoviesDataSource
+import me.paixao.tmdbexplorer.utils.AppExecutors
 
 
 /**
- * Implementation of the data source that adds a latency simulating network.
+ * Implementation of the data source of the network
  */
 class MoviesRemoteDataSource private constructor(
         val appExecutors: AppExecutors
@@ -22,23 +21,6 @@ class MoviesRemoteDataSource private constructor(
     private val apiKey = "83d01f18538cb7a275147492f84c3698"
     private val apiService = TMDbAPI.create()
 
-    private val data = MutableLiveData<List<Movie>>()
-
-
-    /*fun discoverMoreMovies(): io.reactivex.Flowable<Result> {
-        page++
-        return apiService.discover(apiKey, "popularity.desc", page)
-    }
-
-    fun getMovieWithId(movieId: Long): io.reactivex.Flowable<Movie> {
-        return apiService.get(movieId, apiKey)
-    }*/
-
-    /**
-     * Note: [LoadMoviesCallback.onDataNotAvailable] is never fired. In a real remote data
-     * source implementation, this would be fired if the server can't be contacted or the server
-     * returns an error.
-     */
     override fun getMovies(): LiveData<List<Movie>> {
         return getMovies(1)
     }
@@ -55,11 +37,6 @@ class MoviesRemoteDataSource private constructor(
         return apiService.search(apiKey, query)
     }
 
-    /**
-     * Note: [GetMovieCallback.onDataNotAvailable] is never fired. In a real remote data
-     * source implementation, this would be fired if the server can't be contacted or the server
-     * returns an error.
-     */
     override fun getMovie(movieId: Long): LiveData<Movie?> {
         val movie: LiveData<Movie?> = Transformations.map(
                 apiService.get(movieId, apiKey), { data ->
@@ -69,8 +46,6 @@ class MoviesRemoteDataSource private constructor(
     }
 
     override fun refreshMovies() {
-        // Not required because the {@link MoviesRepository} handles the logic of refreshing the
-        // movies from all the available data sources.
     }
 
     override fun deleteAllMovies() {

@@ -2,11 +2,11 @@ package me.paixao.tmdbexplorer.data.source.local
 
 import android.arch.lifecycle.LiveData
 import android.support.annotation.VisibleForTesting
-import com.example.android.architecture.blueprints.todoapp.util.AppExecutors
 import io.reactivex.Observable
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.data.MovieList
 import me.paixao.tmdbexplorer.data.source.MoviesDataSource
+import me.paixao.tmdbexplorer.utils.AppExecutors
 
 
 /**
@@ -20,10 +20,6 @@ class MoviesLocalDataSource private constructor(
 
     private val listOfMovies: LiveData<List<Movie>> = moviesDao.getMovies()
 
-    /**
-     * Note: [LoadMoviesCallback.onDataNotAvailable] is fired if the database doesn't exist
-     * or the table is empty.
-     */
     override fun getMovies(): LiveData<List<Movie>> {
         return listOfMovies
     }
@@ -40,17 +36,11 @@ class MoviesLocalDataSource private constructor(
         appExecutors.diskIO.execute { moviesDao.insertMovies(movies) }
     }
 
-    /**
-     * Note: [GetMovieCallback.onDataNotAvailable] is fired if the [Movie] isn't
-     * found.
-     */
     override fun getMovie(movieId: Long): LiveData<Movie?> {
         return moviesDao.getMovieById(movieId)
     }
 
     override fun refreshMovies() {
-        // Not required because the {@link MoviesRepository} handles the logic of refreshing the
-        // movies from all the available data sources.
     }
 
     override fun deleteAllMovies() {

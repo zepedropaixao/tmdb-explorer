@@ -36,7 +36,7 @@ interface MoviesDao {
     fun insertMovie(movie: Movie)
 
     /**
-     * Insert a list of movies in the database. If the movie already exists, replace it.
+     * Insert a list of movies in the database. If the movies already exist, replace them.
      *
      * @param movie the movie to be inserted.
      */

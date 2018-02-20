@@ -1,9 +1,8 @@
-package me.paixao.tmdbexplorer.ui.movielist
+package me.paixao.tmdbexplorer.ui
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.disposables.CompositeDisposable
@@ -12,10 +11,6 @@ import me.paixao.tmdbexplorer.utils.ViewModelFactory
 open class BaseActivity : AppCompatActivity() {
 
     protected val disposables = CompositeDisposable()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

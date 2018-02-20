@@ -8,11 +8,9 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 import me.paixao.tmdbexplorer.R
 import me.paixao.tmdbexplorer.data.Movie
 import me.paixao.tmdbexplorer.databinding.ActivityMovieDetailBinding
-import me.paixao.tmdbexplorer.ui.movielist.BaseActivity
+import me.paixao.tmdbexplorer.ui.BaseActivity
 
 class MovieDetailActivity : BaseActivity() {
-
-
     private lateinit var viewModel: MovieDetailViewModel
     private lateinit var binding: ActivityMovieDetailBinding
 

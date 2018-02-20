@@ -5,7 +5,6 @@ import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.support.annotation.VisibleForTesting
-import com.example.android.architecture.blueprints.todoapp.util.AppExecutors
 import me.paixao.tmdbexplorer.data.source.MoviesRepository
 import me.paixao.tmdbexplorer.data.source.local.MoviesLocalDataSource
 import me.paixao.tmdbexplorer.data.source.local.TMDBExplorerDatabase
@@ -16,10 +15,6 @@ import me.paixao.tmdbexplorer.ui.movielist.MovieListViewModel
 
 /**
  * A creator is used to inject the product ID into the ViewModel
- *
- *
- * This creator is to showcase how to inject dependencies into ViewModels. It's not
- * actually necessary in this case, as the product ID can be passed in a public method.
  */
 class ViewModelFactory private constructor(
         private val application: Application,
