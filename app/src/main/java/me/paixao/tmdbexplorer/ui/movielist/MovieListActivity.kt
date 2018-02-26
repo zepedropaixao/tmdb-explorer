@@ -104,5 +104,6 @@ open class MovieListActivity : BaseActivity() {
         })
     }
 
+
     fun obtainViewModel(): MovieListViewModel = obtainViewModel(MovieListViewModel::class.java)
 }

@@ -14,6 +14,7 @@ class MovieDetailActivity : BaseActivity() {
     private lateinit var viewModel: MovieDetailViewModel
     private lateinit var binding: ActivityMovieDetailBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail)
@@ -31,7 +32,6 @@ class MovieDetailActivity : BaseActivity() {
             movie_rating.visibility = View.VISIBLE
         })
     }
-
 
     fun obtainViewModel(): MovieDetailViewModel = obtainViewModel(MovieDetailViewModel::class.java)
 

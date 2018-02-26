@@ -22,5 +22,5 @@ interface MoviesDataSource {
 
     fun deleteAllMovies()
 
-    fun deleteMovie(MovieId: String)
+    fun deleteMovie(movieId: String)
 }

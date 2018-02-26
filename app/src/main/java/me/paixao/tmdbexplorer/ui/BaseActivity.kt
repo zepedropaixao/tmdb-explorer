@@ -3,14 +3,26 @@ package me.paixao.tmdbexplorer.ui
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.disposables.CompositeDisposable
+import me.paixao.tmdbexplorer.AppDelegate
 import me.paixao.tmdbexplorer.utils.ViewModelFactory
+import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
 
     protected val disposables = CompositeDisposable()
+
+    @Inject
+    protected lateinit var vmf: ViewModelFactory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AppDelegate.vmfComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -24,7 +36,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun <T : ViewModel> obtainViewModel(viewModelClass: Class<T>) =
-            ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
+            ViewModelProviders.of(this, vmf).get(viewModelClass)
 
     fun isLandscape() = getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT
 

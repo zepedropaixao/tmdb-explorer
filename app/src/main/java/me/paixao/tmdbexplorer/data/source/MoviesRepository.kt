@@ -110,7 +110,7 @@ class MoviesRepository(
         moviesLocalDataSource.deleteMovie(movieId)
     }
 
-    companion object {
+    /*companion object {
 
         private var INSTANCE: MoviesRepository? = null
 
@@ -140,5 +140,5 @@ class MoviesRepository(
         fun destroyInstance() {
             INSTANCE = null
         }
-    }
+    }*/
 }
