@@ -26,8 +26,7 @@ class AppDelegate : Application() {
                 .build()
 
         vmfComponent = DaggerViewModelFactoryComponent.builder()
-                // list of modules that are part of this component need to be created here too
-                .appModule(AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
+                .netComponent(netComponent)
                 .build()
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
