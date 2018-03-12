@@ -1,5 +1,6 @@
 package me.paixao.tmdbexplorer.ui.movielist
 
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
@@ -104,6 +105,6 @@ open class MovieListActivity : BaseActivity() {
         })
     }
 
+    override fun obtainViewModel() = obtainViewModel(MovieListViewModel::class.java)
 
-    fun obtainViewModel(): MovieListViewModel = obtainViewModel(MovieListViewModel::class.java)
 }

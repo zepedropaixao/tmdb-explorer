@@ -1,5 +1,6 @@
 package me.paixao.tmdbexplorer.ui
 
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
@@ -11,7 +12,7 @@ import me.paixao.tmdbexplorer.AppDelegate
 import me.paixao.tmdbexplorer.utils.ViewModelFactory
 import javax.inject.Inject
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     protected val disposables = CompositeDisposable()
 
@@ -35,7 +36,9 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun <T : ViewModel> obtainViewModel(viewModelClass: Class<T>) =
+    abstract fun obtainViewModel(): Any
+
+    fun <T : AndroidViewModel> obtainViewModel(viewModelClass: Class<T>) =
             ViewModelProviders.of(this, vmf).get(viewModelClass)
 
     fun isLandscape() = getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT
